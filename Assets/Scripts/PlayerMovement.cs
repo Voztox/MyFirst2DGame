@@ -1,35 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Playermovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    private Rigidbody2D body;
     [SerializeField] private float speed;
-    private Animator anime;
-
-    //Grab referencer from the objects.
-    private void Awake (){
+    private Rigidbody2D body;
+    private Animator anim;
+    private bool grounded;
+    
+    private void Awake()
+    {   
+        //Grabs references for rigidbody and animator from game object.
         body = GetComponent<Rigidbody2D>();
-        anime = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
     }
-
-    private void Update(){
+ 
+    private void Update()
+    {
         float horizontalInput = Input.GetAxis("Horizontal");
-        body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y);
-
-        //flip player for left and right turns.
-        if(horizontalInput > 0.01f){
+        body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+ 
+        //Flip player when facing left/right.
+        if (horizontalInput > 0.01f)
             transform.localScale = Vector3.one;
-        }
-        else if(horizontalInput < -0.01f){
-            transform.localScale = new Vector3(-1,1,1);
-        }
-
-        if(Input.GetKey(KeyCode.W)){
-            body.velocity = new Vector2(body.velocity.x, speed/2);
-        }
-        //animator parameters
-        anime.SetBool("run", horizontalInput != 0); 
+        else if (horizontalInput < -0.01f)
+            transform.localScale = new Vector3(-1, 1, 1);
+ 
+        if (Input.GetKey(KeyCode.W) && grounded)
+            Jump();
+ 
+        //sets animation parameters
+        anim.SetBool("run", horizontalInput != 0);
+        anim.SetBool("grounded", grounded);
     }
+ 
+    private void Jump()
+    {
+        body.velocity = new Vector2(body.velocity.x, speed);
+        anim.SetTrigger("jump");
+        grounded = false;
+    }
+ 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+            grounded = true;
+    }
 }
