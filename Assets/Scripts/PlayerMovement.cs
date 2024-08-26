@@ -6,9 +6,12 @@ public class Playermovement : MonoBehaviour
 {
     private Rigidbody2D body;
     [SerializeField] private float speed;
+    private Animator anime;
 
+    //Grab referencer from the objects.
     private void Awake (){
         body = GetComponent<Rigidbody2D>();
+        anime = GetComponent<Animator>();
     }
 
     private void Update(){
@@ -26,5 +29,7 @@ public class Playermovement : MonoBehaviour
         if(Input.GetKey(KeyCode.W)){
             body.velocity = new Vector2(body.velocity.x, speed/2);
         }
+        //animator parameters
+        anime.SetBool("run", horizontalInput != 0); 
     }
 }
