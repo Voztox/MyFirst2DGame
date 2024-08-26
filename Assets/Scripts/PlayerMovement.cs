@@ -12,9 +12,18 @@ public class Playermovement : MonoBehaviour
     }
 
     private void Update(){
+        float horizontalInput = Input.GetAxis("Horizontal");
         body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed, body.velocity.y);
 
-        if(Input.GetKey(KeyCode.Space)){
+        //flip player for left and right turns.
+        if(horizontalInput > 0.01f){
+            transform.localScale = Vector3.one;
+        }
+        else if(horizontalInput < -0.01f){
+            transform.localScale = new Vector3(-1,1,1);
+        }
+
+        if(Input.GetKey(KeyCode.W)){
             body.velocity = new Vector2(body.velocity.x, speed/2);
         }
     }
