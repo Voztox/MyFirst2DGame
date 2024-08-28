@@ -360,6 +360,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!50 &896247528
 Rigidbody2D:
   serializedVersion: 4
@@ -375,7 +378,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2.8
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -419,7 +422,7 @@ GameObject:
   - component: {fileID: 1198080971}
   - component: {fileID: 1198080970}
   - component: {fileID: 1198080972}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}
