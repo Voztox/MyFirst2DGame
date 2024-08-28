@@ -35,6 +35,7 @@ public class Projectile : MonoBehaviour
         boxCollider.enabled = false;
         anim.SetTrigger("explode");
     }
+    
     public void SetDirection(float _direction)
     {
         lifetime = 0;
