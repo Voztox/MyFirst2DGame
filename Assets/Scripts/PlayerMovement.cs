@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private float jumpPower;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
     private Rigidbody2D body;
@@ -40,11 +41,8 @@ public class PlayerMovement : MonoBehaviour
 
         
         //wall jump cool down logic
-        if(wallJumpCd < 0.2f)
-        {   
-            if (Input.GetKey(KeyCode.W) && isGrounded())
-                Jump();
-
+        if(wallJumpCd > 0.2f)
+        {
             body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
         
             if(onWall() && !isGrounded())
@@ -53,7 +51,10 @@ public class PlayerMovement : MonoBehaviour
                 body.velocity = Vector2.zero;
             }
             else 
-                body.gravityScale = 3;
+                body.gravityScale = 7;
+                
+            if (Input.GetKey(KeyCode.W))
+                Jump();
         }
         else
         wallJumpCd += Time.deltaTime;
@@ -62,8 +63,15 @@ public class PlayerMovement : MonoBehaviour
  
     private void Jump()
     {
-        body.velocity = new Vector2(body.velocity.x, speed);
+        if(isGrounded()){
+            
+        body.velocity = new Vector2(body.velocity.x, jumpPower);
         anim.SetTrigger("jump");
+        }
+        else if (onWall() && !isGrounded()){
+            wallJumpCd = 0;
+            body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 3, 6);
+         }
     }
  
     private void OnCollisionEnter2D(Collision2D collision)
